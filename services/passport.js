@@ -20,7 +20,7 @@ passport.use(
   new GoogleStrategy({
     clientID: keys.googleClientId,
     clientSecret: keys.googleClientSecret,
-    callbackURL: '/auth/google/callback',
+    callbackURL: 'https://calm-tor-73662.herokuapp.com/auth/google/auth/google/callback',
   }, (accessToken, refreshToken, profile, done) => {
     User.findOne({googleId: profile.id})
       .then((existingUser) => {
