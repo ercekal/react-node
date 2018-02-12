@@ -1,6 +1,6 @@
 module.exports = {
   googleClientId: process.env.googleClientId,
   googleClientSecret: process.env.googleClientSecret,
-  mongoURIDev: process.env.mongoURIDev,
+  mongoURI: process.env.mongoURI,
   cookieKey: process.env.cookieKey,
 }
