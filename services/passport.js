@@ -16,20 +16,27 @@ passport.deserializeUser((id, done) => {
   })
 })
 
+let URL
+if (process.env.NODE_ENV === 'production') {
+  URL = 'https://calm-tor-73662.herokuapp.com/auth/google/callback'
+} else {
+  URL = '/auth/google/callback'
+}
+
 passport.use(
-  new GoogleStrategy({
-    clientID: keys.googleClientId,
-    clientSecret: keys.googleClientSecret,
-    callbackURL: 'https://calm-tor-73662.herokuapp.com/auth/google/callback',
-  }, (accessToken, refreshToken, profile, done) => {
-    User.findOne({googleId: profile.id})
-      .then((existingUser) => {
-        if (existingUser) {
-          done(null, existingUser)
-        } else {
-          new User({googleId: profile.id}).save()
-          .then(user => done(null, user))
-        }
-      })
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientId,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: URL,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+    const existingUser = await User.findOne({googleId: profile.id})
+    if (existingUser) {
+      return done(null, existingUser)
+    } else {
+      const user = await new User({googleId: profile.id}).save()
+      return done(null, user)
+    }
   })
 )
